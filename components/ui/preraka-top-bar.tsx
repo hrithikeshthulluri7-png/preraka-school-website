@@ -26,10 +26,10 @@ export default function PrerakaTopBar() {
     <div
       className="w-full z-50"
       style={{
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(24px) saturate(180%)",
-        WebkitBackdropFilter: "blur(24px) saturate(180%)",
-        borderBottom: "1px solid rgba(255,255,255,0.15)",
+        background: "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(28px) saturate(180%)",
+        WebkitBackdropFilter: "blur(28px) saturate(180%)",
+        borderBottom: "1px solid rgba(4,30,66,0.12)",
         transform: mounted ? "translateY(0)" : "translateY(-100%)",
         opacity: mounted ? 1 : 0,
         transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease",
@@ -52,33 +52,33 @@ export default function PrerakaTopBar() {
         <div className="flex items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.18)" }}>
+              style={{ background: "rgba(4,30,66,0.08)" }}>
               <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
-                <rect x="2" y="4" width="20" height="16" rx="2" stroke="white" strokeWidth="2" />
-                <path d="M2 7l10 7 10-7" stroke="white" strokeWidth="2" />
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="#041E42" strokeWidth="2" />
+                <path d="M2 7l10 7 10-7" stroke="#041E42" strokeWidth="2" />
               </svg>
             </div>
             <div className="hidden sm:block">
-              <p className="text-xs leading-none text-white/60">Email Us Anytime</p>
-              <p className="text-xs font-semibold text-white leading-tight mt-0.5">prerakastaff@gmail.com</p>
+              <p className="text-xs leading-none" style={{ color: "rgba(4,30,66,0.5)" }}>Email Us Anytime</p>
+              <p className="text-xs font-bold leading-tight mt-0.5" style={{ color: "#041E42" }}>prerakastaff@gmail.com</p>
             </div>
-            <p className="text-xs font-medium text-white sm:hidden">prerakastaff@gmail.com</p>
+            <p className="text-xs font-bold sm:hidden" style={{ color: "#041E42" }}>prerakastaff@gmail.com</p>
           </div>
 
-          <div className="hidden sm:block w-px h-7" style={{ background: "rgba(255,255,255,0.2)" }} />
+          <div className="hidden sm:block w-px h-7" style={{ background: "rgba(4,30,66,0.15)" }} />
 
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.18)" }}>
+              style={{ background: "rgba(4,30,66,0.08)" }}>
               <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
-                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.36 11.36 0 003.88.76 1 1 0 011 1V20a1 1 0 01-1 1C7.61 21 3 16.39 3 10a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.21 1.11L6.62 10.79z" stroke="white" strokeWidth="2" />
+                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.36 11.36 0 003.88.76 1 1 0 011 1V20a1 1 0 01-1 1C7.61 21 3 16.39 3 10a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.21 1.11L6.62 10.79z" stroke="#041E42" strokeWidth="2" />
               </svg>
             </div>
             <div className="hidden sm:block">
-              <p className="text-xs leading-none text-white/60">Call Us Anytime</p>
-              <p className="text-xs font-semibold text-white leading-tight mt-0.5">+91 9100272854</p>
+              <p className="text-xs leading-none" style={{ color: "rgba(4,30,66,0.5)" }}>Call Us Anytime</p>
+              <p className="text-xs font-bold leading-tight mt-0.5" style={{ color: "#041E42" }}>+91 9100272854</p>
             </div>
-            <p className="text-xs font-medium text-white sm:hidden">+91 9100272854</p>
+            <p className="text-xs font-bold sm:hidden" style={{ color: "#041E42" }}>+91 9100272854</p>
           </div>
         </div>
 

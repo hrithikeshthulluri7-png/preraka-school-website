@@ -23,7 +23,7 @@ export default function DynamicIslandNav() {
   return (
     <div
       className="fixed z-50 flex justify-center pointer-events-none"
-      style={{ top: 56, left: 0, right: 0 }}
+      style={{ top: 70, left: 0, right: 0 }}
     >
       <motion.div
         className="relative overflow-hidden cursor-pointer pointer-events-auto"

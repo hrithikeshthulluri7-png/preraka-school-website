@@ -202,7 +202,7 @@ export default function PrerakaCurriculum() {
   return (
     <section
       className="relative w-full overflow-hidden py-24"
-      style={{ background: `linear-gradient(180deg, white 0%, ${CREAM}60 100%)` }}
+      style={{ background: "linear-gradient(180deg, #A3D5FF 0%, #C8E8FF 48%, #A3D5FF 100%)" }}
     >
       {/* Floating background icons */}
       {FLOAT_ICONS.map((fi, i) => (
@@ -216,6 +216,48 @@ export default function PrerakaCurriculum() {
           {fi.emoji}
         </motion.div>
       ))}
+
+      {/* Section-level PRERAKA brand heading */}
+      <motion.div
+        className="text-center mb-12 z-10 relative"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <motion.h2
+          className="font-black uppercase"
+          style={{
+            color: NAVY,
+            fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
+            letterSpacing: "0.1em",
+          }}
+          animate={{
+            textShadow: [
+              "0 0 20px rgba(4,30,66,0.2)",
+              "0 0 40px rgba(4,30,66,0.6), 0 0 80px rgba(4,30,66,0.3)",
+              "0 0 20px rgba(4,30,66,0.2)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          PRERAKA
+        </motion.h2>
+        <p className="mt-1 text-sm font-semibold tracking-[0.22em] uppercase" style={{ color: NAVY, opacity: 0.6 }}>
+          The School of Change.
+        </p>
+        <p className="mt-2 text-sm" style={{ color: NAVY, opacity: 0.55 }}>
+          🌱&nbsp; Equality &nbsp;•&nbsp; Motivate &nbsp;•&nbsp; Inspirational &nbsp;•&nbsp; Independent
+        </p>
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <div className="h-px flex-1 max-w-24" style={{ background: `${NAVY}25` }} />
+          <p className="text-xs font-bold tracking-widest uppercase" style={{ color: GREEN }}>
+            Integrated Curriculum
+          </p>
+          <div className="h-px flex-1 max-w-24" style={{ background: `${NAVY}25` }} />
+        </div>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">

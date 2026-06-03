@@ -124,15 +124,51 @@ export default function AnimatedShaderHero({ trustBadge, headline, subtitle, but
         .delay-400{animation-delay:0.4s}
         .delay-600{animation-delay:0.6s}
         .delay-800{animation-delay:0.8s}
+        @keyframes letterFall{from{opacity:0;transform:translateY(-40px) scale(0.7)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @keyframes letterGlow{0%,100%{text-shadow:0 0 18px rgba(161,207,239,0.35)}50%{text-shadow:0 0 40px rgba(161,207,239,0.95),0 0 80px rgba(161,207,239,0.5),0 0 120px rgba(46,126,70,0.2)}}
+        @keyframes taglinePulse{0%,100%{opacity:0.75}50%{opacity:1}}
+        .letter-fall{animation:letterFall 0.55s cubic-bezier(0.34,1.56,0.64,1) both,letterGlow 2.8s ease-in-out 1s infinite}
+        .tagline-pulse{animation:taglinePulse 3s ease-in-out 1.5s infinite}
       `}</style>
 
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-4">
+
+        {/* ── PRERAKA brand — animated letter-by-letter with glow ── */}
+        <div className="text-center mb-5 fade-in-down">
+          <div className="flex items-center justify-center" style={{ gap: "0.04em" }}>
+            {"PRERAKA".split("").map((letter, i) => (
+              <span
+                key={i}
+                className="letter-fall font-black text-white select-none"
+                style={{
+                  fontSize: "clamp(3.2rem, 9vw, 7.5rem)",
+                  fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+                  lineHeight: 1,
+                  letterSpacing: "-0.01em",
+                  animationDelay: `${i * 0.07}s, ${1 + i * 0.08}s`,
+                  display: "inline-block",
+                }}
+              >
+                {letter}
+              </span>
+            ))}
+          </div>
+          <p
+            className="mt-1 font-light tracking-[0.28em] uppercase text-sm fade-in-down"
+            style={{ color: "rgba(161,207,239,0.72)", animationDelay: "0.65s", letterSpacing: "0.28em" }}
+          >
+            The School of Change.
+          </p>
+        </div>
+
         {trustBadge && (
-          <div className="mb-8 fade-in-down">
-            <div className="flex items-center gap-2 px-6 py-3 rounded-full text-sm backdrop-blur-md border"
-              style={{ background: "rgba(4,30,66,0.3)", borderColor: "rgba(161,207,239,0.35)" }}>
+          <div className="mb-8 fade-in-down" style={{ animationDelay: "0.8s" }}>
+            <div
+              className="tagline-pulse flex items-center gap-2 px-6 py-3 rounded-full text-sm backdrop-blur-md border"
+              style={{ background: "rgba(4,30,66,0.35)", borderColor: "rgba(161,207,239,0.4)" }}
+            >
               {trustBadge.icons?.map((icon, i) => <span key={i}>{icon}</span>)}
               <span style={{ color: "#A1CFEF" }}>{trustBadge.text}</span>
             </div>

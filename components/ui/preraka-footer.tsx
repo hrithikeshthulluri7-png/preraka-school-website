@@ -1,5 +1,6 @@
 "use client";
 import { Share2, Users, Play, Briefcase } from "lucide-react";
+import { motion } from "framer-motion";
 
 const YELLOW = "#FFEE00";
 
@@ -84,10 +85,22 @@ export default function PrerakaFooter() {
         style={{ background: "#062B4F", minHeight: "720px" }}>
         <AnimatedWaves />
 
-        <div className="relative z-10 text-center px-6 flex flex-col items-center">
-          <p className="text-white text-sm tracking-[0.35em] uppercase mb-8 font-light opacity-80">
+        <motion.div
+          className="relative z-10 text-center px-6 flex flex-col items-center"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <motion.p
+            className="text-white text-sm tracking-[0.35em] uppercase mb-8 font-light opacity-80"
+            initial={{ opacity: 0, letterSpacing: "0.1em" }}
+            whileInView={{ opacity: 0.8, letterSpacing: "0.35em" }}
+            transition={{ duration: 1.2, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             IT&apos;S TIME TO
-          </p>
+          </motion.p>
 
           <h2
             className="font-black uppercase leading-none text-center select-none"
@@ -99,10 +112,27 @@ export default function PrerakaFooter() {
               fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
             }}
           >
-            START<br />YOUR<br />JOURNEY
+            {"START YOUR JOURNEY".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                className="block"
+                initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
 
-          <div className="mt-16 flex flex-col items-center gap-0">
+          <motion.div
+            className="mt-16 flex flex-col items-center gap-0"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
             <a
               href="#contact"
               className="text-white text-lg tracking-widest hover:opacity-70 transition-opacity duration-200"
@@ -111,8 +141,8 @@ export default function PrerakaFooter() {
               Book a School Visit
             </a>
             <div className="w-48 mt-1" style={{ borderBottom: "1px solid rgba(255,255,255,0.5)" }} />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Yellow vertical connector line */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 z-10"
@@ -136,9 +166,15 @@ export default function PrerakaFooter() {
         <div className="max-w-5xl mx-auto px-6 border-t border-b" style={{ borderColor: "rgba(6,43,79,0.15)" }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
             {footerCols.map((col, i) => (
-              <div key={col.title}
+              <motion.div
+                key={col.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: i * 0.1 }}
+                viewport={{ once: true }}
                 className={`py-10 px-6 ${i < footerCols.length - 1 ? "md:border-r" : ""}`}
-                style={{ borderColor: "rgba(6,43,79,0.15)" }}>
+                style={{ borderColor: "rgba(6,43,79,0.15)" }}
+              >
                 <h4 className="font-bold text-base mb-1 underline underline-offset-4" style={{ color: "#062B4F" }}>
                   {col.title}
                 </h4>
@@ -149,7 +185,7 @@ export default function PrerakaFooter() {
                   <p key={line} className="text-sm mb-1 opacity-70" style={{ color: "#062B4F" }}>{line}</p>
                 ))}
                 <p className="text-sm mt-2 font-semibold" style={{ color: "#062B4F" }}>{col.highlight}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
