@@ -57,7 +57,7 @@ const sections: Section[] = [
       "🌳 The Oak (Grades 6 – 7): An oak spreads deep roots. Our senior students receive guest lectures, lead school initiatives, and begin their journey as student entrepreneurs — ready to shape the future."
     ],
     image: "/assets/about/school-3.jpg",
-    accent: "#A1CFEF",
+    accent: "#2E7E46",
     reverse: false,
   },
   {
@@ -71,7 +71,7 @@ const sections: Section[] = [
       "🤝 Safe & Inclusive: We offer a secure community where every child is valued, respected, and encouraged to achieve their full potential — regardless of background or learning style."
     ],
     image: "/assets/about/school-4.jpg",
-    accent: "#F99D84",
+    accent: "#041E42",
     reverse: true,
   },
 ];
@@ -94,42 +94,52 @@ function ParallaxSection({ section }: { section: Section }) {
       ref={ref}
       className={`min-h-screen flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 px-6 md:px-16 py-20 ${section.reverse ? "md:flex-row-reverse" : ""}`}
     >
-      {/* ── Text side ── */}
+      {/* ── Text side — white glass card for contrast on blue bg ── */}
       <motion.div
         style={{ y: textY, opacity: textOpacity }}
         className="flex-1 max-w-xl"
       >
-        {/* Tag */}
-        <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 flex items-center gap-2"
-          style={{ color: section.accent }}>
-          <span className="w-8 h-px inline-block" style={{ background: section.accent }} />
-          {section.tag}
-        </p>
+        <div className="rounded-2xl p-8"
+          style={{
+            background: "rgba(255,255,255,0.75)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(4,30,66,0.1)",
+            boxShadow: "0 8px 40px rgba(4,30,66,0.10)",
+          }}>
 
-        {/* Title */}
-        <h2 className="font-bold leading-tight mb-2"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 3rem)" }}>
-          {section.title}
-          <br />
-          <span style={{ color: section.accent }}>{section.subtitle}</span>
-        </h2>
+          {/* Tag */}
+          <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 flex items-center gap-2"
+            style={{ color: section.accent }}>
+            <span className="w-6 h-0.5 inline-block rounded-full" style={{ background: section.accent }} />
+            {section.tag}
+          </p>
 
-        {/* Divider */}
-        <div className="h-0.5 w-16 rounded-full mb-6 mt-4" style={{ background: section.accent }} />
+          {/* Title */}
+          <h2 className="font-bold leading-tight mb-2"
+            style={{ color: NAVY, fontFamily: "Georgia, serif", fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)" }}>
+            {section.title}
+            <br />
+            <span style={{ color: section.accent }}>{section.subtitle}</span>
+          </h2>
 
-        {/* Body paragraphs */}
-        <div className="space-y-4">
-          {section.body.map((para, i) => (
-            <p key={i} className="leading-relaxed" style={{ color: "#374151", fontSize: "0.95rem" }}>
-              {para}
-            </p>
-          ))}
-        </div>
+          {/* Divider */}
+          <div className="h-0.5 w-14 rounded-full mb-5 mt-3" style={{ background: section.accent }} />
 
-        {/* Pill badge */}
-        <div className="mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
-          style={{ background: `${section.accent}18`, border: `1px solid ${section.accent}35`, color: section.accent }}>
-          <span>✦</span> Preraka — The School of Change
+          {/* Body paragraphs — dark navy text for max contrast */}
+          <div className="space-y-3">
+            {section.body.map((para, i) => (
+              <p key={i} className="leading-relaxed font-medium"
+                style={{ color: "#1a2e4a", fontSize: "0.92rem" }}>
+                {para}
+              </p>
+            ))}
+          </div>
+
+          {/* Pill badge */}
+          <div className="mt-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold"
+            style={{ background: `${section.accent}22`, border: `1px solid ${section.accent}50`, color: section.accent }}>
+            <span>✦</span> Preraka — The School of Change
+          </div>
         </div>
       </motion.div>
 

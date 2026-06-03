@@ -5,7 +5,24 @@ import DynamicIslandNav from "./dynamic-island-nav";
 
 export default function AboutHero() {
   const scrollToContent = useCallback(() => {
-    document.getElementById("about-content")?.scrollIntoView({ behavior: "smooth" });
+    const target = document.getElementById("about-content");
+    if (!target) return;
+    const targetY = target.getBoundingClientRect().top + window.scrollY;
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const duration = 1400; // 1.4s silky eased scroll
+    let startTime: number | null = null;
+
+    const ease = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (ts: number) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      window.scrollTo(0, startY + distance * ease(progress));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   }, []);
 
   return (
