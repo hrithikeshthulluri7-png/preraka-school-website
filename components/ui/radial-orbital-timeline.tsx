@@ -6,7 +6,14 @@ import { X } from "lucide-react";
 const NAVY = "#041E42";
 const GREEN = "#2E7E46";
 const SKY = "#A1CFEF";
-const CREAM = "#F5F0E8";
+
+// Returns dark or white text for readability on a given hex background
+function adaptiveText(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55 ? "#041E42" : "white";
+}
 
 const FLOAT_ICONS = [
   { emoji: "🏺", x: "4%",  y: "14%", dur: 4.2, delay: 0   },
@@ -142,7 +149,7 @@ export default function RadialOrbitalTimeline() {
   return (
     <section
       className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-16"
-      style={{ background: `linear-gradient(135deg, ${SKY}30 0%, ${CREAM} 60%, ${SKY}20 100%)` }}
+      style={{ background: "linear-gradient(180deg, #A3D5FF 0%, #C8E8FF 45%, #A3D5FF 100%)" }}
     >
       {/* Floating background icons */}
       {FLOAT_ICONS.map((fi, i) => (
@@ -157,21 +164,69 @@ export default function RadialOrbitalTimeline() {
         </motion.div>
       ))}
 
-      {/* Section heading */}
+      {/* School name — bold animated glow */}
       <motion.div
-        className="text-center mb-8 z-10"
-        initial={{ opacity: 0, y: 24 }}
+        className="text-center mb-6 z-10"
+        initial={{ opacity: 0, y: 32 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: GREEN }}>
-          Our Programs
-        </p>
-        <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Georgia, serif", color: NAVY }}>
+        <motion.h1
+          className="font-black uppercase tracking-widest"
+          style={{
+            color: NAVY,
+            fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+            fontSize: "clamp(3rem, 8vw, 6rem)",
+            lineHeight: 1,
+            letterSpacing: "0.08em",
+          }}
+          animate={{
+            textShadow: [
+              "0 0 20px rgba(4,30,66,0.25), 0 0 40px rgba(4,30,66,0.1)",
+              "0 0 35px rgba(4,30,66,0.65), 0 0 70px rgba(4,30,66,0.35), 0 0 100px rgba(4,30,66,0.15)",
+              "0 0 20px rgba(4,30,66,0.25), 0 0 40px rgba(4,30,66,0.1)",
+            ],
+          }}
+          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          PRERAKA
+        </motion.h1>
+
+        <motion.p
+          className="mt-1 font-semibold"
+          style={{ color: NAVY, opacity: 0.7, fontSize: "1rem", letterSpacing: "0.06em" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.7 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          The School of Change.
+        </motion.p>
+
+        <motion.p
+          className="mt-3 text-sm font-medium"
+          style={{ color: NAVY, opacity: 0.65 }}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 0.65, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          🌱&nbsp; Equality &nbsp;•&nbsp; Motivate &nbsp;•&nbsp; Inspirational &nbsp;•&nbsp; Independent
+        </motion.p>
+
+        <div className="mt-5 mb-1 flex items-center justify-center gap-3">
+          <div className="h-px w-16" style={{ background: `${NAVY}30` }} />
+          <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: GREEN }}>
+            Our Programs
+          </p>
+          <div className="h-px w-16" style={{ background: `${NAVY}30` }} />
+        </div>
+
+        <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: "Georgia, serif", color: NAVY }}>
           What Makes Preraka Different
         </h2>
-        <p className="mt-3 text-gray-400 text-sm">
+        <p className="mt-2 text-xs" style={{ color: NAVY, opacity: 0.5 }}>
           Click any node to explore · Click the tree to learn about us
         </p>
       </motion.div>
@@ -278,55 +333,63 @@ export default function RadialOrbitalTimeline() {
           </div>
         ))}
 
-        {/* Popup — appears between center and clicked node */}
-        {activeProgram && (
-          <motion.div
-            key={activeId}
-            initial={{ opacity: 0, scale: 0.65 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 420, damping: 26 }}
-            className="absolute z-40 rounded-2xl shadow-2xl p-4"
-            style={{
-              left: `${popupCX}px`,
-              top: `${popupCY}px`,
-              transform: "translate(-50%, -50%)",
-              width: 224,
-              background: "linear-gradient(145deg, #062B4F 0%, #041E42 100%)",
-              border: `1.5px solid ${activeProgram.color}75`,
-            }}
-          >
-            <button
-              onClick={e => { e.stopPropagation(); handleClose(); }}
-              className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full flex items-center justify-center"
-              style={{ background: activeProgram.color, zIndex: 10 }}
-            >
-              <X size={11} color="white" />
-            </button>
+        {/* Popup — uses node's own color, adaptive text for readability */}
+        {activeProgram && (() => {
+          const popBg = activeProgram.color;
+          const textCol = adaptiveText(popBg);
+          const subCol = textCol === "white" ? "rgba(255,255,255,0.65)" : "rgba(4,30,66,0.55)";
+          const borderCol = textCol === "white" ? "rgba(255,255,255,0.25)" : "rgba(4,30,66,0.2)";
+          const iconBg = textCol === "white" ? "rgba(255,255,255,0.2)" : "rgba(4,30,66,0.1)";
 
-            <div className="flex items-center gap-2.5 mb-2.5">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: `${activeProgram.color}35`, border: `1px solid ${activeProgram.color}55`, fontSize: "1.3rem" }}>
-                {activeProgram.icon}
+          return (
+            <motion.div
+              key={activeId}
+              initial={{ opacity: 0, scale: 0.65 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 420, damping: 26 }}
+              className="absolute z-40 rounded-2xl shadow-2xl p-4"
+              style={{
+                left: `${popupCX}px`,
+                top: `${popupCY}px`,
+                transform: "translate(-50%, -50%)",
+                width: 224,
+                background: `linear-gradient(135deg, ${popBg} 0%, ${popBg}dd 100%)`,
+                border: `1.5px solid ${borderCol}`,
+              }}
+            >
+              <button
+                onClick={e => { e.stopPropagation(); handleClose(); }}
+                className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full flex items-center justify-center"
+                style={{ background: textCol === "white" ? "rgba(255,255,255,0.25)" : "rgba(4,30,66,0.2)", border: `1px solid ${borderCol}` }}
+              >
+                <X size={11} color={textCol} />
+              </button>
+
+              <div className="flex items-center gap-2.5 mb-2.5">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
+                  style={{ background: iconBg, border: `1px solid ${borderCol}` }}>
+                  {activeProgram.icon}
+                </div>
+                <div>
+                  <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-0.5 font-semibold"
+                    style={{ background: iconBg, color: textCol, border: `1px solid ${borderCol}` }}>
+                    Program
+                  </span>
+                  <p className="text-xs font-bold leading-tight" style={{ color: textCol }}>{activeProgram.title}</p>
+                  <p className="text-xs mt-0.5" style={{ color: subCol }}>{activeProgram.subtitle}</p>
+                </div>
               </div>
-              <div>
-                <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-0.5"
-                  style={{ background: `${activeProgram.color}30`, color: activeProgram.color, border: `1px solid ${activeProgram.color}45` }}>
-                  Program
-                </span>
-                <p className="text-xs font-bold text-white leading-tight">{activeProgram.title}</p>
-                <p className="text-xs mt-0.5" style={{ color: "rgba(161,207,239,0.6)" }}>{activeProgram.subtitle}</p>
+              <p className="text-xs leading-relaxed" style={{ color: subCol }}>
+                {activeProgram.description.length > 115
+                  ? activeProgram.description.slice(0, 112) + "…"
+                  : activeProgram.description}
+              </p>
+              <div className="mt-2.5 pt-2" style={{ borderTop: `1px solid ${borderCol}` }}>
+                <p className="text-xs font-semibold" style={{ color: textCol }}>Preraka School of Change</p>
               </div>
-            </div>
-            <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.73)" }}>
-              {activeProgram.description.length > 115
-                ? activeProgram.description.slice(0, 112) + "…"
-                : activeProgram.description}
-            </p>
-            <div className="mt-2.5 pt-2" style={{ borderTop: `1px solid ${activeProgram.color}35` }}>
-              <p className="text-xs font-semibold" style={{ color: activeProgram.color }}>Preraka School of Change</p>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          );
+        })()}
 
         {/* Center popup */}
         {centerActive && (

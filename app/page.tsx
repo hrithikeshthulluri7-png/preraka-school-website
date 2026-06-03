@@ -2,6 +2,7 @@
 import { useState } from "react";
 import PrerakaIntroLoader from "@/components/ui/preraka-intro-loader";
 import PrerakaTopBar from "@/components/ui/preraka-top-bar";
+import DynamicIslandNav from "@/components/ui/dynamic-island-nav";
 import AnimatedShaderHero from "@/components/ui/animated-shader-hero";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import PrerakaCurriculum from "@/components/ui/preraka-curriculum";
@@ -19,6 +20,8 @@ export default function Home() {
       <main className={`transition-opacity duration-700 ${introComplete ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
         {/* Sticky top bar */}
         <PrerakaTopBar />
+        {/* Dynamic Island nav — fixed, floats below top bar */}
+        <DynamicIslandNav />
 
         {/* Section 1 — Hero */}
         <AnimatedShaderHero
