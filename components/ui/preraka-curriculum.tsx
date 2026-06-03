@@ -1,25 +1,24 @@
 "use client";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CardTransformed, CardsContainer, ContainerScroll } from "./animated-cards-stack";
 
 const NAVY = "#041E42";
 const GREEN = "#2E7E46";
-
-const FLOAT_CSS = `
-@keyframes floatD{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(3deg)}}
-@keyframes floatE{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px) rotate(-4deg)}}
-@keyframes floatF{0%,100%{transform:translate(0,0)}40%{transform:translate(12px,-10px)}80%{transform:translate(-6px,-16px)}}
-`;
+const CREAM = "#F5F0E8";
 
 const FLOAT_ICONS = [
-  { emoji: "🎵", left: "1%",  top: "18%", anim: "floatD", delay: "0.2s",  size: "2rem"   },
-  { emoji: "⚙️", left: "96%", top: "22%", anim: "floatE", delay: "0.9s",  size: "1.9rem" },
-  { emoji: "📜", left: "2%",  top: "68%", anim: "floatF", delay: "1.4s",  size: "1.7rem" },
-  { emoji: "🌱", left: "95%", top: "64%", anim: "floatD", delay: "0.6s",  size: "1.6rem" },
-  { emoji: "🖌️", left: "4%",  top: "44%", anim: "floatE", delay: "1.1s",  size: "1.6rem" },
-  { emoji: "🔬", left: "93%", top: "44%", anim: "floatF", delay: "0.4s",  size: "1.5rem" },
-  { emoji: "📐", left: "1%",  top: "86%", anim: "floatD", delay: "1.8s",  size: "1.4rem" },
-  { emoji: "🧩", left: "94%", top: "84%", anim: "floatE", delay: "0.7s",  size: "1.4rem" },
+  { emoji: "🎵", x: "1%",  y: "10%", dur: 4.2, delay: 0.2  },
+  { emoji: "⚙️", x: "96%", y: "14%", dur: 3.8, delay: 0.9  },
+  { emoji: "📜", x: "2%",  y: "55%", dur: 4.6, delay: 1.4  },
+  { emoji: "🌱", x: "95%", y: "52%", dur: 4.0, delay: 0.6  },
+  { emoji: "🖌️", x: "3%",  y: "78%", dur: 5.0, delay: 1.1  },
+  { emoji: "🔬", x: "93%", y: "74%", dur: 3.6, delay: 0.4  },
+  { emoji: "📐", x: "1%",  y: "34%", dur: 4.4, delay: 1.8  },
+  { emoji: "🧩", x: "94%", y: "36%", dur: 3.9, delay: 0.7  },
+  { emoji: "🎯", x: "48%", y: "2%",  dur: 4.7, delay: 0.3  },
+  { emoji: "🧬", x: "50%", y: "96%", dur: 4.1, delay: 1.5  },
+  { emoji: "🖥️", x: "24%", y: "3%",  dur: 3.7, delay: 1.0  },
+  { emoji: "🪁", x: "74%", y: "3%",  dur: 4.3, delay: 0.5  },
 ];
 
 interface CardData {
@@ -29,59 +28,69 @@ interface CardData {
   icon: string;
   color: string;
   tag: string;
-  bgPattern: React.ReactNode;
+  accent: string;
+  pattern: React.ReactNode;
 }
 
-function CircuitPattern({ color }: { color: string }) {
+function CircuitLines({ color }: { color: string }) {
   return (
-    <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 360 120" preserveAspectRatio="xMidYMid slice">
-      {[20,60,100,140,180,220,260,300,340].map(x => (
-        <g key={x}>
-          <circle cx={x} cy={40 + (x % 40)} r="4" stroke={color} strokeWidth="1.5" fill="none" />
-          <line x1={x} y1={44 + (x % 40)} x2={x} y2={80} stroke={color} strokeWidth="1" opacity="0.6" />
-          <line x1={x} y1={80} x2={x + 20} y2={80} stroke={color} strokeWidth="1" opacity="0.6" />
+    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      {[30, 80, 130, 180, 230, 280, 330, 380].map((x, i) => (
+        <g key={i} opacity="0.25">
+          <circle cx={x} cy={40 + (i % 3) * 22} r="5" stroke={color} strokeWidth="1.5" fill="none" />
+          <line x1={x} y1={45 + (i % 3) * 22} x2={x} y2={100} stroke={color} strokeWidth="1" />
+          <line x1={x} y1={100} x2={x + 24} y2={100} stroke={color} strokeWidth="1" />
         </g>
       ))}
+      <rect x="0" y="120" width="400" height="1" fill={color} opacity="0.15" />
     </svg>
   );
 }
 
-function HexPattern({ color }: { color: string }) {
+function HexGrid({ color }: { color: string }) {
+  const pts = (cx: number, cy: number) =>
+    Array.from({ length: 6 }, (_, k) => {
+      const a = (k * 60 - 30) * Math.PI / 180;
+      return `${(cx + 20 * Math.cos(a)).toFixed(1)},${(cy + 20 * Math.sin(a)).toFixed(1)}`;
+    }).join(" ");
+  const hexes: [number, number][] = [
+    [50,50],[110,50],[170,50],[230,50],[290,50],[350,50],
+    [80,90],[140,90],[200,90],[260,90],[320,90],
+  ];
   return (
-    <svg className="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 360 120" preserveAspectRatio="xMidYMid slice">
-      {[0,1,2,3,4,5,6].map(i =>
-        [0,1].map(j => {
-          const cx = i * 60 + (j % 2) * 30;
-          const cy = j * 55 + 20;
-          const pts = Array.from({length:6},(_, k)=>`${cx+22*Math.cos(k*60*Math.PI/180)},${cy+22*Math.sin(k*60*Math.PI/180)}`).join(" ");
-          return <polygon key={`${i}-${j}`} points={pts} stroke={color} strokeWidth="1.5" fill="none" />;
-        })
-      )}
-    </svg>
-  );
-}
-
-function WavePattern({ color }: { color: string }) {
-  return (
-    <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 360 120" preserveAspectRatio="xMidYMid slice">
-      {[20,40,60,80,100].map((y, i) => (
-        <path key={i} d={`M0 ${y} Q90 ${y-18} 180 ${y} Q270 ${y+18} 360 ${y}`} stroke={color} strokeWidth="1.5" fill="none" />
-      ))}
-      {[80,120,160,200,240,280].map(x => (
-        <text key={x} x={x} y={55} fontSize="18" fill={color} opacity="0.4">♪</text>
+    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      {hexes.map(([cx, cy], i) => (
+        <polygon key={i} points={pts(cx, cy)} stroke={color} strokeWidth="1.2" fill="none" opacity="0.22" />
       ))}
     </svg>
   );
 }
 
-function ToolsPattern({ color }: { color: string }) {
+function WaveLines({ color }: { color: string }) {
   return (
-    <svg className="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 360 120" preserveAspectRatio="xMidYMid slice">
-      {[30,90,150,210,270,330].map((x, i) => (
-        <g key={i} transform={`translate(${x},${40 + (i%2)*20})`}>
-          <rect x="-6" y="-20" width="12" height="40" rx="2" stroke={color} strokeWidth="1.5" fill="none" />
-          <rect x="-10" y="-24" width="20" height="8" rx="2" stroke={color} strokeWidth="1.5" fill="none" />
+    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      {[25, 50, 75, 100, 125].map((y, i) => (
+        <path key={i} d={`M0 ${y} Q100 ${y - 16} 200 ${y} Q300 ${y + 16} 400 ${y}`}
+          stroke={color} strokeWidth="1.4" fill="none" opacity={0.18 + i * 0.04} />
+      ))}
+      {[70, 130, 190, 250, 310].map(x => (
+        <text key={x} x={x} y={60} fontSize="20" fill={color} opacity="0.3">♪</text>
+      ))}
+    </svg>
+  );
+}
+
+function ToolGrid({ color }: { color: string }) {
+  return (
+    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      {[40, 100, 160, 220, 280, 340].map((x, i) => (
+        <g key={i} transform={`translate(${x},${35 + (i % 2) * 22})`} opacity="0.22">
+          <rect x="-5" y="-18" width="10" height="36" rx="2" stroke={color} strokeWidth="1.4" fill="none" />
+          <rect x="-9" y="-22" width="18" height="7" rx="1.5" stroke={color} strokeWidth="1.4" fill="none" />
         </g>
+      ))}
+      {[60, 180, 300].map(x => (
+        <circle key={x} cx={x} cy={110} r="12" stroke={color} strokeWidth="1.2" fill="none" opacity="0.2" />
       ))}
     </svg>
   );
@@ -89,74 +98,133 @@ function ToolsPattern({ color }: { color: string }) {
 
 const cards: CardData[] = [
   {
-    id: 1,
-    label: "The Power Of AI",
-    description: "Personalized, adaptive learning through the CoSchool platform.",
-    icon: "🤖",
-    color: "#041E42",
-    tag: "AI Learning",
-    bgPattern: <CircuitPattern color="white" />,
+    id: 1, label: "The Power Of AI", icon: "🤖", color: NAVY, tag: "AI Learning", accent: "#A1CFEF",
+    description: "Personalized, adaptive learning through the CoSchool AI platform — giving every student a custom path to mastery.",
+    pattern: <CircuitLines color="white" />,
   },
   {
-    id: 2,
-    label: "The Logic Of STEM",
-    description: "Practical, real-world application of Science, Technology, Engineering, and Mathematics.",
-    icon: "⚙️",
-    color: "#2E7E46",
-    tag: "STEM",
-    bgPattern: <HexPattern color="white" />,
+    id: 2, label: "The Logic Of STEM", icon: "⚙️", color: "#2E7E46", tag: "STEM", accent: "#8ECDA8",
+    description: "Practical, real-world application of Science, Technology, Engineering, and Mathematics — building tomorrow's problem-solvers.",
+    pattern: <HexGrid color="white" />,
   },
   {
-    id: 3,
-    label: "The Soul Of Gandharya Vidhya",
-    description: "Integrating ancient Indian traditions of music and sound to promote emotional well-being and holistic development.",
-    icon: "🎵",
-    color: "#FFB81C",
-    tag: "Ancient Wisdom",
-    bgPattern: <WavePattern color="white" />,
+    id: 3, label: "The Soul Of Gandharya Vidhya", icon: "🎵", color: "#B8860B", tag: "Ancient Wisdom", accent: "#FFB81C",
+    description: "Integrating ancient Indian traditions of music and sound — promoting emotional well-being and holistic development.",
+    pattern: <WaveLines color="white" />,
   },
   {
-    id: 4,
-    label: "DIY: Create, Don't Just Consume",
-    description: "Master real-world skills through hands-on making. We turn curiosity into confidence by letting students build, solve, and innovate with their own hands.",
-    icon: "🔧",
-    color: "#F99D84",
-    tag: "Hands-On",
-    bgPattern: <ToolsPattern color="white" />,
+    id: 4, label: "DIY: Create, Don't Just Consume", icon: "🔧", color: "#C0704A", tag: "Hands-On", accent: "#F99D84",
+    description: "We turn curiosity into confidence. Students build, solve, and innovate with their own hands — not just follow instructions.",
+    pattern: <ToolGrid color="white" />,
   },
 ];
 
+function TiltCard({ card, index }: { card: CardData; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+
+  const onMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const rx = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
+    const ry = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+    setTilt({ x: rx, y: ry });
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 48 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: "-80px" }}
+      onMouseMove={onMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(false); }}
+      className="relative rounded-2xl overflow-hidden cursor-pointer mb-6 last:mb-0 border"
+      style={{
+        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 16 : 0}px)`,
+        transition: hovered ? "transform 0.05s linear" : "transform 0.55s cubic-bezier(0.22,1,0.36,1)",
+        transformStyle: "preserve-3d",
+        borderColor: `${card.color}20`,
+        boxShadow: hovered ? `0 24px 60px ${card.color}25, 0 0 0 1px ${card.color}30` : "0 4px 24px rgba(0,0,0,0.06)",
+      }}
+    >
+      {/* Header band */}
+      <div className="relative overflow-hidden flex items-end justify-between px-6 pb-5"
+        style={{ height: 130, background: `linear-gradient(135deg, ${card.color} 0%, ${card.color}cc 100%)` }}>
+        {card.pattern}
+
+        {/* Concentric ring accents */}
+        {[1, 2, 3].map(n => (
+          <div key={n} className="absolute rounded-full pointer-events-none" style={{
+            width: 36 + n * 40, height: 36 + n * 40,
+            right: -18 + n * 2, bottom: -18 + n * 2,
+            border: "1px solid rgba(255,255,255,0.15)",
+          }} />
+        ))}
+
+        {/* Icon badge */}
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl z-10 flex-shrink-0"
+          style={{ background: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(8px)" }}>
+          {card.icon}
+        </div>
+
+        {/* Tag label */}
+        <span className="z-10 text-xs font-bold tracking-widest uppercase pb-1"
+          style={{ color: "rgba(255,255,255,0.72)", letterSpacing: "0.15em" }}>
+          {card.tag}
+        </span>
+
+        {/* 3D depth layer — visible on hover tilt */}
+        <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
+          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%)" }} />
+      </div>
+
+      {/* Content */}
+      <div className="px-6 py-5 bg-white">
+        <h3 className="font-bold text-lg leading-tight mb-2" style={{ color: NAVY }}>
+          {card.label}
+        </h3>
+        <p className="text-sm text-gray-500 leading-relaxed">{card.description}</p>
+        <div className="mt-4 flex items-center gap-2">
+          <div className="w-5 h-px flex-1" style={{ background: `${card.color}30` }} />
+          <span className="text-xs font-semibold" style={{ color: card.color }}>Preraka</span>
+          <div className="w-5 h-px flex-1" style={{ background: `${card.color}30` }} />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function PrerakaCurriculum() {
   return (
-    <section className="relative w-full bg-white overflow-hidden">
-      <style>{FLOAT_CSS}</style>
-
-      {/* Floating decorative icons */}
+    <section
+      className="relative w-full overflow-hidden py-24"
+      style={{ background: `linear-gradient(180deg, white 0%, ${CREAM}60 100%)` }}
+    >
+      {/* Floating background icons */}
       {FLOAT_ICONS.map((fi, i) => (
-        <div
+        <motion.div
           key={i}
-          className="absolute pointer-events-none select-none"
-          style={{
-            left: fi.left,
-            top: fi.top,
-            fontSize: fi.size,
-            animation: `${fi.anim} ${4.5 + (i % 3) * 0.8}s ease-in-out ${fi.delay} infinite`,
-            opacity: 0.45,
-            zIndex: 0,
-          }}
+          className="absolute pointer-events-none select-none text-2xl"
+          style={{ left: fi.x, top: fi.y, zIndex: 0 }}
+          animate={{ y: [0, -20, 0], rotate: [0, 5, -4, 0] }}
+          transition={{ duration: fi.dur, repeat: Infinity, ease: "easeInOut", delay: fi.delay }}
         >
           {fi.emoji}
-        </div>
+        </motion.div>
       ))}
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start pt-20 md:pt-32">
-          {/* Left — sticky text with scroll reveal */}
-          <div className="md:sticky md:top-24 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
+          {/* Left — sticky heading */}
+          <div className="md:sticky md:top-24">
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true, margin: "-80px" }}
             >
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 flex items-center gap-2" style={{ color: GREEN }}>
@@ -170,81 +238,55 @@ export default function PrerakaCurriculum() {
               </p>
             </motion.div>
 
-            {/* Summary bullets */}
+            {/* Summary list */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
               viewport={{ once: true, margin: "-80px" }}
-              className="mt-8 space-y-3"
+              className="mt-10 space-y-4"
             >
-              {cards.map((c) => (
-                <div key={c.id} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                    style={{ background: `${c.color}15`, border: `1px solid ${c.color}30` }}>
+              {cards.map((c, i) => (
+                <motion.div
+                  key={c.id}
+                  initial={{ opacity: 0, x: -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.45, delay: 0.35 + i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-center gap-3 p-3 rounded-xl"
+                  style={{ background: `${c.color}08`, border: `1px solid ${c.color}18` }}
+                >
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                    style={{ background: `${c.color}18`, border: `1px solid ${c.color}30` }}>
                     {c.icon}
                   </div>
-                  <p className="text-sm font-medium" style={{ color: NAVY }}>{c.label}</p>
-                </div>
+                  <p className="text-sm font-semibold" style={{ color: NAVY }}>{c.label}</p>
+                </motion.div>
               ))}
             </motion.div>
+
+            {/* Decorative quote */}
+            <motion.blockquote
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              viewport={{ once: true }}
+              className="mt-10 pl-4 border-l-4"
+              style={{ borderColor: GREEN }}
+            >
+              <p className="text-sm italic text-gray-500 leading-relaxed">
+                "Equality · Motivate · Inspirational · Independent"
+              </p>
+              <p className="text-xs mt-2 font-semibold" style={{ color: GREEN }}>— Preraka School of Change</p>
+            </motion.blockquote>
           </div>
 
-          {/* Right — scroll-driven card stack */}
-          <ContainerScroll className="h-[280vh]">
-            <div className="sticky top-0 h-screen flex items-center justify-center py-12">
-              <CardsContainer className="relative h-[480px] w-[360px]">
-                {cards.map((card, i) => (
-                  <CardTransformed
-                    key={card.id}
-                    arrayLength={cards.length}
-                    index={i + 1}
-                    variant="light"
-                    className="!items-start !justify-start gap-0 !p-0 !overflow-hidden"
-                  >
-                    {/* Visual header band */}
-                    <div
-                      className="w-full relative overflow-hidden flex items-end justify-between px-5 pb-4"
-                      style={{
-                        height: 130,
-                        background: `linear-gradient(135deg, ${card.color} 0%, ${card.color}bb 100%)`,
-                        borderRadius: "1rem 1rem 0 0",
-                      }}
-                    >
-                      {card.bgPattern}
-                      {/* Large bg emoji */}
-                      <span className="absolute right-3 top-3 text-7xl opacity-15 select-none">{card.icon}</span>
-                      {/* Concentric ring accents */}
-                      {[1,2,3].map(n => (
-                        <div key={n} className="absolute rounded-full" style={{
-                          width: 40 + n * 36, height: 40 + n * 36,
-                          right: -20 + n * 4, bottom: -20 + n * 4,
-                          border: "1px solid rgba(255,255,255,0.18)",
-                        }} />
-                      ))}
-                      {/* Icon badge */}
-                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl z-10 flex-shrink-0"
-                        style={{ background: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.38)" }}>
-                        {card.icon}
-                      </div>
-                      <span className="text-xs font-bold tracking-widest uppercase z-10 pb-1"
-                        style={{ color: "rgba(255,255,255,0.75)", letterSpacing: "0.14em" }}>
-                        {card.tag}
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className="px-6 pt-5 pb-4 flex flex-col gap-2">
-                      <h3 className="font-bold text-lg leading-tight" style={{ color: NAVY }}>
-                        {card.label}
-                      </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">{card.description}</p>
-                    </div>
-                  </CardTransformed>
-                ))}
-              </CardsContainer>
-            </div>
-          </ContainerScroll>
+          {/* Right — 3D tilt cards */}
+          <div className="pt-4">
+            {cards.map((card, i) => (
+              <TiltCard key={card.id} card={card} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
