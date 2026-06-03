@@ -258,7 +258,7 @@ export default function PrerakaIntroLoader({ onComplete }: { onComplete: () => v
           className="w-full h-full object-cover"
           style={{ filter: "contrast(2.4) brightness(1.2) saturate(0.45)" }}
         >
-          <source src="/assets/tree-growth.mp4" type="video/mp4" />
+          <source src="/assets/preraka-tree.mp4" type="video/mp4" />
           {/* Fallback: SVG tree */}
           <div className="flex items-center justify-center w-full h-full">
             <svg viewBox="0 0 80 104" width="130" fill="none">
