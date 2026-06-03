@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useEffect } from "react";
+import DynamicIslandNav from "./dynamic-island-nav";
 
 interface HeroProps {
   trustBadge?: { text: string; icons?: string[] };
@@ -132,6 +133,9 @@ export default function AnimatedShaderHero({ trustBadge, headline, subtitle, but
       `}</style>
 
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" />
+
+      {/* Dynamic Island lives inside hero — scrolls away with it, never fixed */}
+      <DynamicIslandNav inline />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-4">
 

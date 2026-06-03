@@ -11,19 +11,19 @@ const navLinks = [
   { label: "Contact",   href: "/contact" },
 ];
 
-export default function DynamicIslandNav() {
+export default function DynamicIslandNav({ inline = false }: { inline?: boolean }) {
   const [expanded, setExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 500);
+    const t = setTimeout(() => setMounted(true), inline ? 900 : 500);
     return () => clearTimeout(t);
-  }, []);
+  }, [inline]);
 
   return (
     <div
-      className="fixed z-50 flex justify-center pointer-events-none"
-      style={{ top: 70, left: 0, right: 0 }}
+      className={`${inline ? "absolute" : "fixed"} z-30 flex justify-center pointer-events-none`}
+      style={{ top: inline ? 76 : 70, left: 0, right: 0 }}
     >
       <motion.div
         className="relative overflow-hidden cursor-pointer pointer-events-auto"
