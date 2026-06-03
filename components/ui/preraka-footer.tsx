@@ -149,21 +149,21 @@ export default function PrerakaFooter() {
           style={{ background: YELLOW }} />
       </div>
 
-      {/* ── Bottom footer ── */}
-      <div style={{ background: "#F6F7F3" }}>
+      {/* ── Bottom footer — bold blue gradient ── */}
+      <div style={{ background: "linear-gradient(180deg, #0B2545 0%, #062B4F 40%, #041E42 100%)" }}>
         {/* Brand */}
         <div className="text-center pt-16 pb-10">
-          <p className="text-5xl font-bold" style={{ fontFamily: "Georgia, serif", color: "#062B4F", letterSpacing: -1 }}>
+          <p className="text-5xl font-bold" style={{ fontFamily: "Georgia, serif", color: "white", letterSpacing: -1 }}>
             Preraka
           </p>
-          <p className="text-base mt-1" style={{ color: "#062B4F", opacity: 0.7 }}>The School of Change.</p>
-          <p className="mt-3 text-sm tracking-widest" style={{ color: "#062B4F", opacity: 0.5 }}>
+          <p className="text-base mt-1 text-white/70">The School of Change.</p>
+          <p className="mt-3 text-sm tracking-widest text-white/45">
             Equality &nbsp;•&nbsp; Motivate &nbsp;•&nbsp; Inspirational &nbsp;•&nbsp; Independent
           </p>
         </div>
 
         {/* 4-column grid */}
-        <div className="max-w-5xl mx-auto px-6 border-t border-b" style={{ borderColor: "rgba(6,43,79,0.15)" }}>
+        <div className="max-w-5xl mx-auto px-6 border-t border-b" style={{ borderColor: "rgba(161,207,239,0.12)" }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
             {footerCols.map((col, i) => (
               <motion.div
@@ -173,18 +173,18 @@ export default function PrerakaFooter() {
                 transition={{ duration: 0.55, delay: i * 0.1 }}
                 viewport={{ once: true }}
                 className={`py-10 px-6 ${i < footerCols.length - 1 ? "md:border-r" : ""}`}
-                style={{ borderColor: "rgba(6,43,79,0.15)" }}
+                style={{ borderColor: "rgba(161,207,239,0.12)" }}
               >
-                <h4 className="font-bold text-base mb-1 underline underline-offset-4" style={{ color: "#062B4F" }}>
+                <h4 className="font-bold text-base mb-1 underline underline-offset-4 text-white">
                   {col.title}
                 </h4>
-                <p className="text-xs font-bold tracking-widest uppercase mb-4 opacity-60" style={{ color: "#062B4F" }}>
+                <p className="text-xs font-bold tracking-widest uppercase mb-4 text-white/40">
                   {col.subtitle}
                 </p>
                 {col.lines.map((line) => (
-                  <p key={line} className="text-sm mb-1 opacity-70" style={{ color: "#062B4F" }}>{line}</p>
+                  <p key={line} className="text-sm mb-1 text-white/60">{line}</p>
                 ))}
-                <p className="text-sm mt-2 font-semibold" style={{ color: "#062B4F" }}>{col.highlight}</p>
+                <p className="text-sm mt-2 font-semibold" style={{ color: "#A1CFEF" }}>{col.highlight}</p>
               </motion.div>
             ))}
           </div>
@@ -195,8 +195,7 @@ export default function PrerakaFooter() {
           <nav className="flex flex-wrap justify-center gap-6">
             {navLinks.map((link) => (
               <a key={link} href="#"
-                className="text-xs font-medium tracking-widest hover:opacity-60 transition-opacity"
-                style={{ color: "#062B4F" }}>
+                className="text-xs font-medium tracking-widest hover:opacity-60 transition-opacity text-white/70">
                 {link}
               </a>
             ))}
@@ -209,8 +208,8 @@ export default function PrerakaFooter() {
               { Icon: Briefcase, label: "LinkedIn" },
             ].map(({ Icon, label }) => (
               <a key={label} href="#" aria-label={label}
-                className="w-9 h-9 rounded-full border flex items-center justify-center hover:opacity-60 transition-opacity"
-                style={{ borderColor: "rgba(6,43,79,0.3)", color: "#062B4F" }}>
+                className="w-9 h-9 rounded-full border flex items-center justify-center hover:opacity-60 transition-opacity text-white/70"
+                style={{ borderColor: "rgba(161,207,239,0.25)" }}>
                 <Icon size={15} />
               </a>
             ))}
@@ -218,12 +217,12 @@ export default function PrerakaFooter() {
         </div>
 
         {/* Legal */}
-        <div className="border-t py-8 px-6 text-center" style={{ borderColor: "rgba(6,43,79,0.1)" }}>
-          <p className="text-xs leading-relaxed max-w-2xl mx-auto opacity-50" style={{ color: "#062B4F" }}>
+        <div className="border-t py-8 px-6 text-center" style={{ borderColor: "rgba(161,207,239,0.1)" }}>
+          <p className="text-xs leading-relaxed max-w-2xl mx-auto text-white/40">
             Preraka School welcomes every family and nurtures children through learning experiences that encourage equality,
             motivation, independence and inspiration. Programs, visits and admissions information are available through the school office.
           </p>
-          <p className="mt-4 text-xs font-semibold tracking-widest uppercase opacity-40" style={{ color: "#062B4F" }}>
+          <p className="mt-4 text-xs font-semibold tracking-widest uppercase text-white/30">
             PRERAKA SCHOOL &nbsp;|&nbsp; THE SCHOOL OF CHANGE
           </p>
         </div>
