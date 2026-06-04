@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -10,10 +11,11 @@ const navLinks = [
   { label: "Contact",   href: "/contact" },
 ];
 
-export default function DynamicIslandNav({ inline = false }: { inline?: boolean }) {
+export default function DynamicIslandNav({ inline = false, top }: { inline?: boolean; top?: number }) {
   const [expanded, setExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(520);
+  const [canHover, setCanHover] = useState(true);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), inline ? 900 : 500);
@@ -27,12 +29,21 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
     return () => window.removeEventListener("resize", syncWidth);
   }, []);
 
+  useEffect(() => {
+    const query = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const syncHover = () => setCanHover(query.matches);
+    syncHover();
+    query.addEventListener("change", syncHover);
+    return () => query.removeEventListener("change", syncHover);
+  }, []);
+
   const expandedWidth = Math.min(520, Math.max(300, viewportWidth - 24));
+  const isOpen = canHover ? expanded : true;
 
   return (
     <div
       className={`${inline ? "absolute" : "fixed"} z-30 flex justify-center pointer-events-none`}
-      style={{ top: inline ? 76 : 70, left: 0, right: 0 }}
+      style={{ top: top ?? (inline ? 76 : 70), left: 0, right: 0 }}
     >
       <motion.div
         className="relative overflow-hidden cursor-pointer pointer-events-auto"
@@ -40,20 +51,19 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
         initial={{ scaleX: 0.6, scaleY: 0.5, opacity: 0 }}
         animate={mounted ? { scaleX: 1, scaleY: 1, opacity: 1 } : {}}
         transition={{ type: "spring", stiffness: 380, damping: 28, delay: 0.1 }}
-        onHoverStart={() => setExpanded(true)}
-        onHoverEnd={() => setExpanded(false)}
-        onClick={() => setExpanded(v => !v)}
+        onHoverStart={() => canHover && setExpanded(true)}
+        onHoverEnd={() => canHover && setExpanded(false)}
       >
         <motion.div
           animate={{
-            width: expanded ? expandedWidth : 130,
-            height: expanded ? (expandedWidth < 420 ? 96 : 52) : 38,
+            width: isOpen ? expandedWidth : 130,
+            height: isOpen ? (expandedWidth < 420 ? 96 : 52) : 38,
           }}
           transition={{ type: "spring", stiffness: 420, damping: 32 }}
         >
           {/* Collapsed pill */}
           <AnimatePresence>
-            {!expanded && (
+            {!isOpen && (
               <motion.div
                 key="collapsed"
                 initial={{ opacity: 0 }}
@@ -77,7 +87,7 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
 
           {/* Expanded nav */}
           <AnimatePresence>
-            {expanded && (
+            {isOpen && (
               <motion.div
                 key="expanded"
                 initial={{ opacity: 0 }}
@@ -87,26 +97,25 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
                 className="absolute inset-0 flex flex-wrap items-center justify-center gap-1 px-4 py-2"
               >
                 {navLinks.map((link, i) => (
-                  <motion.a
+                  <motion.div
                     key={link.label}
-                    href={link.href}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
-                    className="text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap transition-all duration-150"
-                    style={{ letterSpacing: "0.04em" }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.15)";
-                      (e.currentTarget as HTMLElement).style.color = "#A1CFEF";
-                    }}
-                    onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.background = "transparent";
-                      (e.currentTarget as HTMLElement).style.color = "white";
-                    }}
-                    onClick={e => e.stopPropagation()}
                   >
-                    {link.label}
-                  </motion.a>
+                    <Link
+                      href={link.href}
+                      prefetch
+                      className="block text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap transition-all duration-150 hover:bg-white/15 hover:text-[#A1CFEF]"
+                      style={{ letterSpacing: "0.04em" }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setExpanded(false);
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
               </motion.div>
             )}

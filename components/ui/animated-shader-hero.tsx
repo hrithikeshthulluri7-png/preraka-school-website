@@ -135,12 +135,12 @@ export default function AnimatedShaderHero({ trustBadge, headline, subtitle, but
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" />
 
       {/* Dynamic Island lives inside hero — scrolls away with it, never fixed */}
-      <DynamicIslandNav inline />
+      <DynamicIslandNav inline top={16} />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-4">
 
         {/* ── PRERAKA brand — animated letter-by-letter with glow ── */}
-        <div className="text-center mb-5 fade-in-down">
+        <div className="text-center mt-14 mb-4 fade-in-down">
           <div className="flex items-center justify-center" style={{ gap: "0.04em" }}>
             {"PRERAKA".split("").map((letter, i) => (
               <span

@@ -42,6 +42,43 @@ const PRERAKA_CARDS: Card[] = [
   { id: "20", imageUrl: "/assets/gallery/preraka-gallery-20.jpg", alt: "AI sports and movement", title: "AI Sports Movement" },
 ]
 
+function useGalleryImagePreloader(cards: Card[]) {
+  const [loadedCount, setLoadedCount] = useState(0)
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+
+    const loadOne = (src: string) =>
+      new Promise<void>((resolve) => {
+        const img = new window.Image()
+        img.decoding = "async"
+        img.onload = async () => {
+          try {
+            if (img.decode) await img.decode()
+          } catch {
+            // The browser may already have decoded it; continue so one image never blocks the gallery.
+          }
+          resolve()
+        }
+        img.onerror = () => resolve()
+        img.src = src
+      }).then(() => {
+        if (!cancelled) setLoadedCount((count) => count + 1)
+      })
+
+    Promise.all(cards.map((card) => loadOne(card.imageUrl))).then(() => {
+      if (!cancelled) setReady(true)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [cards])
+
+  return { ready, loadedCount, total: cards.length }
+}
+
 function CardProvider({ children }: { children: React.ReactNode }) {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null)
   return (
@@ -56,17 +93,18 @@ function StarfieldBackground() {
   const mountRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!mountRef.current) return
+    const mount = mountRef.current
+    if (!mount) return
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.setClearColor(0x020D1F, 1)
-    mountRef.current.appendChild(renderer.domElement)
+    mount.appendChild(renderer.domElement)
 
     const geo = new THREE.BufferGeometry()
-    const count = 8000
+    const count = 3600
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       pos[i * 3]     = (Math.random() - 0.5) * 2000
@@ -98,7 +136,7 @@ function StarfieldBackground() {
     return () => {
       window.removeEventListener("resize", onResize)
       cancelAnimationFrame(id)
-      mountRef.current?.removeChild(renderer.domElement)
+      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement)
       renderer.dispose(); geo.dispose(); mat.dispose()
     }
   }, [])
@@ -145,7 +183,9 @@ function FloatingCard({ card, position }: {
             src={card.imageUrl}
             alt={card.alt}
             className="w-full h-40 object-cover"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             draggable={false}
           />
           <div className="px-2 py-1.5 text-center">
@@ -212,6 +252,8 @@ function CardModal() {
             alt={selectedCard.alt}
             className="w-full object-cover"
             style={{ aspectRatio: "3/4", maxHeight: 440 }}
+            loading="eager"
+            decoding="async"
           />
           <div className="px-5 py-4">
             <p className="font-bold text-center text-base" style={{ color: "#A1CFEF" }}>{selectedCard.title}</p>
@@ -238,7 +280,7 @@ function CardGalaxy() {
       const layer = 12 + (i % 3) * 4
       return { x: Math.cos(θ) * r * layer, y: y * layer, z: Math.sin(θ) * r * layer }
     })
-  }, [cards.length])
+  }, [cards])
 
   return (
     <>
@@ -256,32 +298,61 @@ function CardGalaxy() {
 
 /* ── Main export ── */
 export default function PrerakaGallery3D() {
+  const { ready, loadedCount, total } = useGalleryImagePreloader(PRERAKA_CARDS)
+
   return (
     <CardProvider>
       <section className="relative w-full h-screen min-h-[720px] overflow-hidden bg-[#020D1F]">
-        <StarfieldBackground />
         <DynamicIslandNav inline />
 
-        <Canvas
-          camera={{ position: [0, 0, 18], fov: 58 }}
-          className="absolute inset-0 z-10"
-          onCreated={({ gl }) => { gl.domElement.style.pointerEvents = "auto" }}
-        >
-          <Suspense fallback={null}>
-            <Environment preset="night" />
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={0.8} color="#A1CFEF" />
-            <pointLight position={[-10, -10, -10]} intensity={0.4} color="#2E7E46" />
-            <CardGalaxy />
-            <OrbitControls
-              enablePan enableZoom enableRotate
-              minDistance={6} maxDistance={45}
-              autoRotate autoRotateSpeed={0.4}
-              rotateSpeed={0.5} zoomSpeed={1.2}
-              target={[0, 0, 0]}
-            />
-          </Suspense>
-        </Canvas>
+        {ready && <StarfieldBackground />}
+
+        {ready ? (
+          <Canvas
+            camera={{ position: [0, 0, 18], fov: 58 }}
+            className="absolute inset-0 z-10"
+            dpr={[1, 1.5]}
+            onCreated={({ gl }) => { gl.domElement.style.pointerEvents = "auto" }}
+          >
+            <Suspense fallback={null}>
+              <Environment preset="night" />
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={0.8} color="#A1CFEF" />
+              <pointLight position={[-10, -10, -10]} intensity={0.4} color="#2E7E46" />
+              <CardGalaxy />
+              <OrbitControls
+                enablePan enableZoom enableRotate
+                minDistance={6} maxDistance={45}
+                autoRotate autoRotateSpeed={0.4}
+                rotateSpeed={0.5} zoomSpeed={1.2}
+                target={[0, 0, 0]}
+              />
+            </Suspense>
+          </Canvas>
+        ) : (
+          <div className="absolute inset-0 z-10 flex items-center justify-center px-6 text-center">
+            <div
+              className="rounded-3xl px-8 py-7"
+              style={{
+                background: "rgba(4,30,66,0.72)",
+                border: "1px solid rgba(161,207,239,0.28)",
+                backdropFilter: "blur(18px)",
+                boxShadow: "0 24px 80px rgba(0,0,0,0.35)",
+              }}
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.28em]" style={{ color: "#A1CFEF" }}>
+                Loading Gallery
+              </p>
+              <p className="mt-3 text-4xl font-black text-white">{loadedCount}/{total}</p>
+              <div className="mt-5 h-2 w-56 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-[#A3D5FF] transition-all duration-300"
+                  style={{ width: `${total ? (loadedCount / total) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <CardModal />
 
@@ -309,7 +380,7 @@ export default function PrerakaGallery3D() {
           </div>
         )}
 
-        {PRERAKA_CARDS.length > 0 && (
+        {ready && PRERAKA_CARDS.length > 0 && (
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
             <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs"
               style={{ background: "rgba(4,30,66,0.7)", border: "1px solid rgba(161,207,239,0.25)", backdropFilter: "blur(8px)", color: "rgba(161,207,239,0.7)" }}>

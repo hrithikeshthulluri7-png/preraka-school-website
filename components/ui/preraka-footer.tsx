@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { CalendarDays, Globe2, Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -148,13 +149,13 @@ export default function PrerakaFooter() {
             transition={{ delay: 0.8, duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <a
+            <Link
               href="/contact"
               className="text-white text-lg tracking-widest hover:opacity-70 transition-opacity duration-200"
               style={{ letterSpacing: "0.18em" }}
             >
               Book a School Visit
-            </a>
+            </Link>
             <div className="w-48 mt-1" style={{ borderBottom: "1px solid rgba(255,255,255,0.5)" }} />
           </motion.div>
         </motion.div>
@@ -209,10 +210,10 @@ export default function PrerakaFooter() {
         <div className="max-w-5xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <nav className="flex flex-wrap justify-center gap-6">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href}
+              <Link key={link.label} href={link.href} prefetch
                 className="text-xs font-medium tracking-widest hover:opacity-60 transition-opacity text-white/70">
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="flex items-center gap-3">
@@ -234,9 +235,9 @@ export default function PrerakaFooter() {
             Preraka School welcomes every family and nurtures children through learning experiences that encourage equality,
             motivation, independence and inspiration. Programs, visits and admissions information are available through the school office.
           </p>
-          <a href="/privacy-policy" className="mt-4 inline-block text-xs font-semibold tracking-widest uppercase text-white/55 hover:text-white">
+          <Link href="/privacy-policy" prefetch className="mt-4 inline-block text-xs font-semibold tracking-widest uppercase text-white/55 hover:text-white">
             Privacy Policy
-          </a>
+          </Link>
           <p className="mt-4 text-xs font-semibold tracking-widest uppercase text-white/30">
             PRERAKA SCHOOL &nbsp;|&nbsp; THE SCHOOL OF CHANGE
           </p>
