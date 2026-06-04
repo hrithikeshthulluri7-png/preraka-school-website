@@ -3,9 +3,8 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState, createContext, useContext } from "react"
 import * as THREE from "three"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Environment, Html, Plane, Sphere } from "@react-three/drei"
+import { OrbitControls, Html, Plane, Sphere } from "@react-three/drei"
 import { X, ZoomIn } from "lucide-react"
-import DynamicIslandNav from "./dynamic-island-nav"
 
 /* ── Types ── */
 type Card = { id: string; imageUrl: string; alt: string; title: string }
@@ -303,8 +302,6 @@ export default function PrerakaGallery3D() {
   return (
     <CardProvider>
       <section className="relative w-full h-screen min-h-[720px] overflow-hidden bg-[#020D1F]">
-        <DynamicIslandNav inline />
-
         {ready && <StarfieldBackground />}
 
         {ready ? (
@@ -315,10 +312,10 @@ export default function PrerakaGallery3D() {
             onCreated={({ gl }) => { gl.domElement.style.pointerEvents = "auto" }}
           >
             <Suspense fallback={null}>
-              <Environment preset="night" />
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} intensity={0.8} color="#A1CFEF" />
-              <pointLight position={[-10, -10, -10]} intensity={0.4} color="#2E7E46" />
+              <ambientLight intensity={0.6} />
+              <pointLight position={[10, 10, 10]} intensity={1.0} color="#A1CFEF" />
+              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#2E7E46" />
+              <pointLight position={[0, 20, 0]} intensity={0.4} color="#ffffff" />
               <CardGalaxy />
               <OrbitControls
                 enablePan enableZoom enableRotate
