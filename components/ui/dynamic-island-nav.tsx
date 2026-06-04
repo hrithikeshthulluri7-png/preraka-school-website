@@ -13,11 +13,21 @@ const navLinks = [
 export default function DynamicIslandNav({ inline = false }: { inline?: boolean }) {
   const [expanded, setExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(520);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), inline ? 900 : 500);
     return () => clearTimeout(t);
   }, [inline]);
+
+  useEffect(() => {
+    const syncWidth = () => setViewportWidth(window.innerWidth);
+    syncWidth();
+    window.addEventListener("resize", syncWidth);
+    return () => window.removeEventListener("resize", syncWidth);
+  }, []);
+
+  const expandedWidth = Math.min(520, Math.max(300, viewportWidth - 24));
 
   return (
     <div
@@ -36,8 +46,8 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
       >
         <motion.div
           animate={{
-            width: expanded ? 520 : 130,
-            height: expanded ? 52 : 38,
+            width: expanded ? expandedWidth : 130,
+            height: expanded ? (expandedWidth < 420 ? 96 : 52) : 38,
           }}
           transition={{ type: "spring", stiffness: 420, damping: 32 }}
         >
@@ -74,7 +84,7 @@ export default function DynamicIslandNav({ inline = false }: { inline?: boolean 
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.14, delay: 0.08 }}
-                className="absolute inset-0 flex items-center justify-center gap-1 px-5"
+                className="absolute inset-0 flex flex-wrap items-center justify-center gap-1 px-4 py-2"
               >
                 {navLinks.map((link, i) => (
                   <motion.a

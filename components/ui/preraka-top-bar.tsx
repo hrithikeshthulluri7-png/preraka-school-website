@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 // Real Preraka logo path — fill="#041E42" + fillRule="evenodd" gives
 // dark oval with white tree cutout, matching the brand PDF screenshot
@@ -35,10 +36,10 @@ export default function PrerakaTopBar() {
         transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-center sm:justify-between gap-2">
 
         {/* Brand logo — white card matches screenshot exactly */}
-        <div className="flex items-center gap-2.5 flex-shrink-0 bg-white/95 rounded-xl px-3 py-1.5 shadow-sm">
+        <Link href="/" aria-label="Go to Preraka home page" className="flex items-center gap-2.5 flex-shrink-0 bg-white/95 rounded-xl px-3 py-1.5 shadow-sm transition-transform duration-200 hover:scale-[1.02]">
           <LogoSVG />
           <div className="leading-tight">
             <p className="font-bold text-sm leading-none" style={{ color: "#041E42", fontFamily: "Georgia, serif" }}>
@@ -46,10 +47,10 @@ export default function PrerakaTopBar() {
             </p>
             <p className="text-xs leading-none mt-0.5 text-gray-500">The School of Change.</p>
           </div>
-        </div>
+        </Link>
 
         {/* Contact strip */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="hidden lg:flex items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: "rgba(4,30,66,0.08)" }}>

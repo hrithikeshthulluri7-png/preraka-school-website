@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
-  ArrowRight,
   CalendarDays,
   Check,
   Copy,
@@ -13,6 +12,7 @@ import {
   LucideIcon,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   Sparkles,
 } from "lucide-react";
@@ -24,10 +24,14 @@ const APP_EMAIL = "prerakastaff@gmail.com";
 const APP_PHONE = "+91 9100272854";
 const APP_ADDRESS = "Radhavendra Nagar, Turkayamjal, Hyderabad - 501510";
 const LUMA_LINK = "https://luma.com/calendar/cal-1e62DDZqPeudPjH?period=past";
+const WHATSAPP_PHONE = APP_PHONE.replace(/\D/g, "");
+const WHATSAPP_MESSAGE = encodeURIComponent("Hello Preraka School, I would like to enquire about admissions and book a school visit.");
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_PHONE}?text=${WHATSAPP_MESSAGE}`;
 
 const onlineLinks = [
   { icon: Globe, href: "https://prerakaschool.com", label: "Website" },
   { icon: CalendarDays, href: LUMA_LINK, label: "Events" },
+  { icon: MessageCircle, href: WHATSAPP_LINK, label: "WhatsApp" },
   { icon: Mail, href: `mailto:${APP_EMAIL}`, label: "Email" },
   { icon: Phone, href: `tel:${APP_PHONE.replace(/\s/g, "")}`, label: "Call" },
 ];
@@ -51,10 +55,12 @@ export default function ContactPageContent() {
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a
-              href={`mailto:${APP_EMAIL}?subject=Preraka School Visit Enquiry`}
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFB81C] px-7 py-3 text-sm font-black uppercase tracking-widest text-[#041E42] transition hover:scale-105"
             >
-              Book a Visit <ArrowRight className="size-4" />
+              Book a Visit <MessageCircle className="size-4" />
             </a>
             <a
               href={`tel:${APP_PHONE.replace(/\s/g, "")}`}
@@ -117,8 +123,13 @@ export default function ContactPageContent() {
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3">
-                  <a href={`mailto:${APP_EMAIL}?subject=Preraka School Admissions Enquiry`} className="inline-flex items-center justify-center gap-2 rounded-full bg-[#041E42] px-5 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:scale-105">
-                    Send Enquiry <Mail className="size-4" />
+                  <a
+                    href={WHATSAPP_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#041E42] px-5 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:scale-105"
+                  >
+                    Send Enquiry <MessageCircle className="size-4" />
                   </a>
                   <Link href="/events" className="inline-flex items-center justify-center gap-2 rounded-full border border-[#041E42]/15 px-5 py-3 text-sm font-black uppercase tracking-widest text-[#041E42] transition hover:bg-[#A3D5FF]/30">
                     View Events <Sparkles className="size-4" />
