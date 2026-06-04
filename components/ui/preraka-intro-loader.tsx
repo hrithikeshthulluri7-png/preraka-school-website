@@ -255,6 +255,7 @@ export default function PrerakaIntroLoader({ onComplete }: { onComplete: () => v
           muted
           playsInline
           loop={false}
+          aria-hidden="true"
           className="w-full h-full object-cover"
           style={{ filter: "contrast(2.4) brightness(1.2) saturate(0.45)" }}
         >

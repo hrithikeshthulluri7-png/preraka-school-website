@@ -7,7 +7,6 @@ import AnimatedShaderHero from "@/components/ui/animated-shader-hero";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import PrerakaCurriculum from "@/components/ui/preraka-curriculum";
 import PrerakaFooter from "@/components/ui/preraka-footer";
-import CookieConsent from "@/components/ui/cookie-consent";
 
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -48,7 +47,7 @@ export default function Home() {
 
         {/* Section 5 — Footer */}
         <PrerakaFooter />
-        {introComplete && <CookieConsent />}
+
       </main>
     </>
   );

@@ -52,7 +52,7 @@ function AnimatedWaves() {
 const footerCols = [
   {
     title: "Admissions",
-    subtitle: "PRE-K TO GRADE 5",
+    subtitle: "NURSERY TO GRADE 7",
     lines: ["Admissions Open 2026-27", "Book a guided school visit"],
     highlight: "+91 9100272854",
   },
@@ -79,16 +79,16 @@ const footerCols = [
 const navLinks = [
   { label: "HOME", href: "/" },
   { label: "ABOUT", href: "/about" },
-  { label: "ADMISSIONS", href: "/contact" },
   { label: "GALLERY", href: "/gallery" },
   { label: "EVENTS", href: "/events" },
   { label: "CONTACT", href: "/contact" },
   { label: "PRIVACY", href: "/privacy-policy" },
+  { label: "TERMS", href: "/terms" },
 ];
 
 const actionLinks = [
   { Icon: Globe2, label: "Website", href: "https://prerakaschool.com" },
-  { Icon: CalendarDays, label: "Events", href: "https://luma.com/calendar/cal-1e62DDZqPeudPjH?period=past" },
+  { Icon: CalendarDays, label: "Events", href: "https://luma.com/calendar/cal-1e62DDZqPeudPjH" },
   { Icon: Mail, label: "Email", href: "mailto:prerakastaff@gmail.com" },
   { Icon: Phone, label: "Call", href: "tel:+919100272854" },
 ];
@@ -173,7 +173,7 @@ export default function PrerakaFooter() {
             Preraka
           </p>
           <p className="text-base mt-1 text-white/70">The School of Change.</p>
-          <p className="mt-3 text-sm tracking-widest text-white/45">
+          <p className="mt-3 text-sm tracking-widest text-white/70">
             Equality &nbsp;•&nbsp; Motivate &nbsp;•&nbsp; Inspirational &nbsp;•&nbsp; Independent
           </p>
         </div>
@@ -194,7 +194,7 @@ export default function PrerakaFooter() {
                 <h4 className="font-bold text-base mb-1 underline underline-offset-4 text-white">
                   {col.title}
                 </h4>
-                <p className="text-xs font-bold tracking-widest uppercase mb-4 text-white/40">
+                <p className="text-xs font-bold tracking-widest uppercase mb-4 text-white/65">
                   {col.subtitle}
                 </p>
                 {col.lines.map((line) => (
@@ -231,15 +231,15 @@ export default function PrerakaFooter() {
 
         {/* Legal */}
         <div className="border-t py-8 px-6 text-center" style={{ borderColor: "rgba(161,207,239,0.1)" }}>
-          <p className="text-xs leading-relaxed max-w-2xl mx-auto text-white/40">
+          <p className="text-xs leading-relaxed max-w-2xl mx-auto text-white/65">
             Preraka School welcomes every family and nurtures children through learning experiences that encourage equality,
             motivation, independence and inspiration. Programs, visits and admissions information are available through the school office.
           </p>
           <Link href="/privacy-policy" prefetch className="mt-4 inline-block text-xs font-semibold tracking-widest uppercase text-white/55 hover:text-white">
             Privacy Policy
           </Link>
-          <p className="mt-4 text-xs font-semibold tracking-widest uppercase text-white/30">
-            PRERAKA SCHOOL &nbsp;|&nbsp; THE SCHOOL OF CHANGE
+          <p className="mt-4 text-xs font-semibold tracking-widest uppercase text-white/60">
+            © 2026 PRERAKA SCHOOL &nbsp;|&nbsp; THE SCHOOL OF CHANGE
           </p>
         </div>
       </div>

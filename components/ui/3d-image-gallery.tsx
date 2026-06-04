@@ -231,9 +231,10 @@ function CardModal() {
     >
       <div className="relative max-w-sm w-full mx-4">
         <button onClick={() => setSelectedCard(null)}
-          className="absolute -top-12 right-0 flex items-center justify-center w-9 h-9 rounded-full transition-colors"
+          aria-label="Close gallery image"
+          className="absolute -top-12 right-0 flex items-center justify-center w-9 h-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A1CFEF]"
           style={{ background: "rgba(161,207,239,0.15)", border: "1px solid rgba(161,207,239,0.35)", color: "#A1CFEF" }}>
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         <div ref={cardRef} className="rounded-2xl overflow-hidden transition-all duration-500"

@@ -1,3 +1,8 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Privacy Policy | Preraka School",
+  description: "How Preraka School collects, uses and protects your personal information under the DPDP Act 2023.",
+};
 import Link from "next/link";
 import PrerakaTopBar from "@/components/ui/preraka-top-bar";
 import PrerakaFooter from "@/components/ui/preraka-footer";

@@ -69,7 +69,6 @@ export const CardTransformed = React.forwardRef<HTMLDivElement, CardStickyProps>
     const dy = useTransform(scrollYProgress, rotateRange, [4, 12]);
     const blur = useTransform(scrollYProgress, rotateRange, [2, 24]);
     const alpha = useTransform(scrollYProgress, rotateRange, [0.15, 0.2]);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const lightFilter = useMotionTemplate`drop-shadow(${dx}px ${dy}px ${blur}px rgba(0,0,0,${alpha}))`;
     const filter = variant === "light" ? lightFilter : "none";
 

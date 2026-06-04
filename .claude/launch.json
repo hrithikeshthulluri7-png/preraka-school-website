@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "preraka-dev",
+      "runtimeExecutable": "/Users/hrithikeshthulluri/.nvm/versions/node/v24.15.0/bin/node",
+      "runtimeArgs": ["/Users/hrithikeshthulluri/.nvm/versions/node/v24.15.0/bin/npm", "run", "dev", "--", "--port", "3001", "--webpack"],
+      "port": 3001
+    }
+  ]
+}
