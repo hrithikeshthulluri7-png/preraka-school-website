@@ -26,6 +26,9 @@ const contentSecurityPolicy = [
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: contentSecurityPolicy },
+  { key: "Access-Control-Allow-Origin", value: isProd ? "https://preraka-school-website.vercel.app" : "http://localhost:3001" },
+  { key: "Access-Control-Allow-Methods", value: "GET, HEAD, OPTIONS" },
+  { key: "Access-Control-Allow-Credentials", value: "false" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-DNS-Prefetch-Control", value: "off" },
