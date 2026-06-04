@@ -83,7 +83,7 @@ export default function PrerakaTopBar() {
         </div>
 
         {/* CTA */}
-        <a href="#contact"
+        <a href="/contact"
           className="flex-shrink-0 px-5 py-1.5 rounded-full text-xs font-bold tracking-wide transition-all duration-200 hover:scale-105"
           style={{ background: "#FFB81C", color: "#041E42" }}>
           APPLY NOW →

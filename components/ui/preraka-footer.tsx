@@ -1,5 +1,5 @@
 "use client";
-import { Share2, Users, Play, Briefcase } from "lucide-react";
+import { CalendarDays, Globe2, Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const YELLOW = "#FFEE00";
@@ -75,7 +75,22 @@ const footerCols = [
   },
 ];
 
-const navLinks = ["HOME", "ABOUT", "ADMISSIONS", "GALLERY", "EVENTS", "CONTACT"];
+const navLinks = [
+  { label: "HOME", href: "/" },
+  { label: "ABOUT", href: "/about" },
+  { label: "ADMISSIONS", href: "/contact" },
+  { label: "GALLERY", href: "/gallery" },
+  { label: "EVENTS", href: "/events" },
+  { label: "CONTACT", href: "/contact" },
+  { label: "PRIVACY", href: "/privacy-policy" },
+];
+
+const actionLinks = [
+  { Icon: Globe2, label: "Website", href: "https://prerakaschool.com" },
+  { Icon: CalendarDays, label: "Events", href: "https://luma.com/calendar/cal-1e62DDZqPeudPjH?period=past" },
+  { Icon: Mail, label: "Email", href: "mailto:prerakastaff@gmail.com" },
+  { Icon: Phone, label: "Call", href: "tel:+919100272854" },
+];
 
 export default function PrerakaFooter() {
   return (
@@ -134,7 +149,7 @@ export default function PrerakaFooter() {
             viewport={{ once: true }}
           >
             <a
-              href="#contact"
+              href="/contact"
               className="text-white text-lg tracking-widest hover:opacity-70 transition-opacity duration-200"
               style={{ letterSpacing: "0.18em" }}
             >
@@ -194,20 +209,17 @@ export default function PrerakaFooter() {
         <div className="max-w-5xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <nav className="flex flex-wrap justify-center gap-6">
             {navLinks.map((link) => (
-              <a key={link} href="#"
+              <a key={link.label} href={link.href}
                 className="text-xs font-medium tracking-widest hover:opacity-60 transition-opacity text-white/70">
-                {link}
+                {link.label}
               </a>
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            {[
-              { Icon: Share2, label: "Instagram" },
-              { Icon: Users, label: "Facebook" },
-              { Icon: Play, label: "YouTube" },
-              { Icon: Briefcase, label: "LinkedIn" },
-            ].map(({ Icon, label }) => (
-              <a key={label} href="#" aria-label={label}
+            {actionLinks.map(({ Icon, label, href }) => (
+              <a key={label} href={href} aria-label={label}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="w-9 h-9 rounded-full border flex items-center justify-center hover:opacity-60 transition-opacity text-white/70"
                 style={{ borderColor: "rgba(161,207,239,0.25)" }}>
                 <Icon size={15} />
@@ -222,6 +234,9 @@ export default function PrerakaFooter() {
             Preraka School welcomes every family and nurtures children through learning experiences that encourage equality,
             motivation, independence and inspiration. Programs, visits and admissions information are available through the school office.
           </p>
+          <a href="/privacy-policy" className="mt-4 inline-block text-xs font-semibold tracking-widest uppercase text-white/55 hover:text-white">
+            Privacy Policy
+          </a>
           <p className="mt-4 text-xs font-semibold tracking-widest uppercase text-white/30">
             PRERAKA SCHOOL &nbsp;|&nbsp; THE SCHOOL OF CHANGE
           </p>

@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PrerakaIntroLoader from "@/components/ui/preraka-intro-loader";
 import PrerakaTopBar from "@/components/ui/preraka-top-bar";
 import AnimatedShaderHero from "@/components/ui/animated-shader-hero";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import PrerakaCurriculum from "@/components/ui/preraka-curriculum";
 import PrerakaFooter from "@/components/ui/preraka-footer";
+import CookieConsent from "@/components/ui/cookie-consent";
 
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -32,8 +35,8 @@ export default function Home() {
           }}
           subtitle="Not by making your child learn by heart — but to keep the learning life time. A future-ready school deeply rooted in values."
           buttons={{
-            primary: { text: "Explore Programs" },
-            secondary: { text: "Book a Visit" },
+            primary: { text: "Explore Programs", onClick: () => router.push("/about") },
+            secondary: { text: "Book a Visit", onClick: () => router.push("/contact") },
           }}
         />
 
@@ -45,6 +48,7 @@ export default function Home() {
 
         {/* Section 5 — Footer */}
         <PrerakaFooter />
+        {introComplete && <CookieConsent />}
       </main>
     </>
   );

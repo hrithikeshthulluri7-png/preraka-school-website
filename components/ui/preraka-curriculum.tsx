@@ -521,7 +521,7 @@ export default function PrerakaCurriculum() {
                 A Holistic Blend Of Tradition And Innovation
               </h2>
               <p className="text-gray-600 leading-relaxed">
-                Our future-ready school is deeply rooted in core values. Preraka's curriculum stands out as a unique blend of excellence:
+                Our future-ready school is deeply rooted in core values. Preraka&apos;s curriculum stands out as a unique blend of excellence:
               </p>
             </motion.div>
 
